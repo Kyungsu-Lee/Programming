@@ -21,6 +21,9 @@ void insert_node (LIST *List, SUBJECT data);
 void delete_node(LIST* List, char* sub_code);
 void fill_list(LIST* List, FILE* file);
 void print_list(LIST* List);
+void add(LIST* List);
+void delete(LIST* List);
+void quit(LIST* List);
 
 int main(int argc, char* argv[])
 {
@@ -45,28 +48,31 @@ int main(int argc, char* argv[])
 	fill_list(List, input_file);
 	printf("과목목록\n");
 	print_list(List);
+
+	fclose(input_file);
+
 	while(1)
 	{
-	printf("\n>> "); scanf("%s", input_str);
+		printf("\n>> "); scanf("%s", input_str);
 
-	if(!strcmp(input_str, "add"))
-	{	
-		
+		if(!strcmp(input_str, "add"))
+		{	
+			add(List);
+		}
+		else if(!strcmp(input_str, "show"))
+		{
+			printf("과목목록\n");
+			print_list(List);
+		}
+		else if(!strcmp(input_str, "delete"))
+		{
+			delete(List);
+		}
+		else if(!strcmp(input_str, "quit"))
+		{
+			quit(List);
+		}
 	}
-	else if(!strcmp(input_str, "show"))
-	{
-		printf("과목목록\n");
-		print_list(List);
-	}
-	else if(!strcmp(input_str, "delete"))
-	{
-		
-	}
-	else if(!strcmp(input_str, "quit"))
-	{
-		
-	}
-}
 }
 
 void init_list(LIST *pList)
@@ -127,21 +133,26 @@ void insert_node (LIST *List, SUBJECT data)
 
 }
 
-void delete_node(LIST* List, char* sub_code)
+void delete_node(LIST* List, char sub_code[])
 {
 	SUBJECT* tmp;
 	SUBJECT* before;
 
-	for(tmp = List->head; tmp && strcmp(tmp->sub_code, sub_code); before = tmp, tmp = tmp->next);
+	for(tmp = List->head; tmp && strcmp(tmp->sub_code, sub_code); before = tmp, tmp = before->next);
 
 	if(!tmp)
 	{
 		printf("Not found\n\n");
 	}
 
-	else
+	else if(tmp != List->head)
 	{
 		before->next = tmp->next;
+		free(tmp);
+	}
+	else
+	{
+		List->head = tmp->next;
 		free(tmp);
 	}
 }
@@ -167,5 +178,49 @@ void print_list(LIST* List)
 		printf("  %d %s %s (%d학점)\n", i+1, tmp->sub_code, tmp->sub_name, tmp->credit);
 	}
 
-	printf("\n");
+}
+
+
+void add(LIST* List)
+{
+	SUBJECT data;
+	
+	printf("과목코드 : "); scanf("%s", data.sub_code);
+	printf("과목명 : "); scanf("%s", data.sub_name);
+	printf("학점 : "); scanf("%d", &(data.credit));
+	insert_node(List, data);
+}
+
+void delete(LIST* List)
+{
+	char str[20];
+	
+	printf("과목코드 : "); scanf("%s", str);
+	delete_node(List, str);
+}
+
+void quit(LIST* List)
+{
+	char output[20];
+	FILE* output_file;
+
+	SUBJECT* before;
+	SUBJECT* tmp;
+
+	printf("파일명 : "); scanf("%s", output);
+	output_file = fopen(output, "w");
+
+	for(tmp = List->head; tmp;)
+	{
+		fprintf(output_file, "%s %s %d\n", tmp->sub_code, tmp->sub_name, tmp->credit);
+		before = tmp;
+		if(before)
+		tmp = before->next;
+		free(before);
+	}
+
+	free(List);
+	fclose(output_file);
+
+	exit(0);
 }
