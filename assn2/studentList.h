@@ -20,10 +20,12 @@ typedef struct student
 
 typedef struct
 {
-	STUDENT head;
-}LIST;
+	STUDENT* head;
+}SLIST;
 
 
-void init_list(LIST *pList);
+void init_list_student(SLIST *pList);
+void insert_list_student(SLIST* List, STUDENT data);
+
 
 #endif

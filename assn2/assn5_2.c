@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "subjectList.h"
+#include "studentList.h"
+
+void fill_student(FILE* input, SLIST* List);
+void fill_list(LIST* List, FILE* file);
 
 int main(int argc, char* argv[])
 {	
@@ -11,6 +15,8 @@ int main(int argc, char* argv[])
 	char input_stu[20];
 
 	int input;
+	SLIST* sList;
+	LIST* List;
 
 	if(argc != 3)
 	{
@@ -32,6 +38,11 @@ int main(int argc, char* argv[])
 		printf("파일을 읽어올 수 없습니다.\n");
 		exit(-1);
 	}
+
+	printf("well\n");
+	fill_student(input_student, sList);
+	fill_list(List, input_subject);
+
 	while(1){
 		printf("\n");
 		printf(" ### 성적관리시스템 ###\n");
@@ -49,3 +60,26 @@ int main(int argc, char* argv[])
 	}
 }
 
+void fill_list(LIST* List, FILE* file)
+{
+	SUBJECT data;
+
+	while(!feof(file))
+	{
+		fscanf(file, "%s %s %d", data.sub_code, data.sub_name, &(data.credit));
+		insert_node(List, data);
+	}
+}
+
+
+void fill_student(FILE* input, SLIST* List)
+{
+	STUDENT data;
+	char line[100];
+	while(!feof(input))
+	{
+		fscanf(input, "%d %s %s %d", &(data.id), data.name, data.dept, &(data.level));
+		fgets(line, 100, input);
+		printf("%s\n", data.name);
+	}
+}
