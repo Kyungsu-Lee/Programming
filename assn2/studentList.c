@@ -20,9 +20,9 @@ void insert_list_student(SLIST* List, STUDENT data)
 	strcpy(node->name, data.name);
 	strcpy(node->dept, data.dept);
 	node->level = data.level;
-	node->sub_num = data.sub_num;
-	for(i=0; i<data.sub_num; i++)
-		node->subjects[i] = data.subjects[i];
+	//node->sub_num = data.sub_num;
+	//for(i=0; i<data.sub_num; i++)
+	//	node->subjects[i] = data.subjects[i];
 
 	if(!(List->head)) // empty
 	{
