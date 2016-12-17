@@ -11,6 +11,7 @@ void case0(LIST* List, SLIST* sList);
 void case1(LIST* List, SLIST* sList);
 void print_list(LIST* List);
 void case2(LIST* List, SLIST* sList);
+double cTg(char* str);
 
 int main(int argc, char* argv[])
 {	
@@ -196,6 +197,8 @@ void case2(LIST* List, SLIST* sList)
 	SUBJECT* tmp;
 	STUDENT* stmp;
 	int num;
+	float grade;
+	int stu;
 
 	while(1)
 	{
@@ -207,19 +210,25 @@ void case2(LIST* List, SLIST* sList)
 		if(n == 0)
 			return;
 		for(tmp = List->head; n>1; n--, tmp = tmp->next);
-	
+		stu = grade = 0;
+
 		printf("과목명 : %s(%s), 학점: %d학점\n", tmp->sub_name, tmp->sub_code, tmp->credit);
 		printf("\n");
 		
+		printf("%s\t | %s\t  | %s\t | %s\t\n", "학번", "이름", "학과(학년)", "학점");
 		for(stmp = sList->head; stmp; stmp = stmp->next)
 		{
+
 			for(num = 0; num < stmp->sub_num; num++)
 				if(!strcmp(stmp->subjects[num].sub_code, tmp->sub_code))
 				{	
-
-					printf("%d | %s | %s(%d) | %s(%d) \n", stmp->id, stmp->name, stmp->dept, stmp->level, stmp->subjects[num].grade, 4.0);
+					printf("%d | %s | %s(%d)\t | %2s(%.1f) \n", stmp->id, stmp->name, stmp->dept, stmp->level, stmp->subjects[num].grade, cTg(stmp->subjects[num].grade));
+					stu++;
+					grade += cTg(stmp->subjects[num].grade);
 				}
 		}
+		printf("\n");
+		printf("** 과목평균: %.2f\n\n", grade/stu);
 	}
 }
 
@@ -250,4 +259,37 @@ void case0(LIST* List, SLIST* sList)
 	free(sList);
 
 	exit(0);
+}
+
+double cTg(char* str)
+{
+	double tmp;
+
+	if(!strcmp(str, "A+"))
+		tmp = 4.3;
+	else if(!strcmp(str, "A0"))
+		tmp = 4;
+	else if(!strcmp(str, "A-"))
+		tmp = 3.7;
+	else if(!strcmp(str, "B+"))
+		tmp = 3.3;
+	else if(!strcmp(str, "B0"))
+		tmp = 3;
+	else if(!strcmp(str, "B-"))
+		tmp = 2.7;
+	else if(!strcmp(str, "C+"))
+		tmp = 2.3;
+	else if(!strcmp(str, "C0"))
+		tmp = 2;
+	else if(!strcmp(str, "C-"))
+		tmp = 1.7;
+	else if(!strcmp(str, "D+"))
+		tmp = 1.3;
+	else if(!strcmp(str, "D0"))
+		tmp = 1;
+	else if(!strcmp(str, "D-"))
+		tmp = 0.7;
+	else if(!strcmp(str, "F"))
+		tmp = 0;
+	return tmp;
 }
