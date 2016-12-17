@@ -63,11 +63,12 @@ int main(int argc, char* argv[])
 void fill_list(LIST* List, FILE* file)
 {
 	SUBJECT data;
+	int n;
 
 	while(!feof(file))
 	{
-		fscanf(file, "%s %s %d", data.sub_code, data.sub_name, &(data.credit));
-		insert_node(List, data);
+		n = fscanf(file, "%s %s %d", data.sub_code, data.sub_name, &(data.credit));
+		if(n == 3) insert_node(List, data);
 	}
 }
 

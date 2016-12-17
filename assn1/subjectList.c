@@ -18,7 +18,6 @@ void insert_node (LIST *List, SUBJECT data)
 	strcpy(node->sub_code, data.sub_code);
 	strcpy(node->sub_name, data.sub_name);
 	node->credit = data.credit;
-	node->next = List->head;
 
 	if(!(List->head))
 	{
@@ -46,19 +45,17 @@ void insert_node (LIST *List, SUBJECT data)
 
 	else
 	{
-		for(tmp = List->head; !(strcmp(node->sub_code, tmp->sub_code) > 0 && strcmp(node->sub_code, tmp->next->sub_code) < 0) && tmp->next; tmp = tmp->next)
+		for(tmp = List->head; tmp->next && !(strcmp(node->sub_code, tmp->sub_code) > 0 && strcmp(node->sub_code, tmp->next->sub_code) < 0) ; tmp = tmp->next)
 		{
 			if(!strcmp(node->sub_code, tmp->sub_code))
 				return;
 		}
-
 		node->next = tmp->next;
 		tmp->next = node;
 		return;
 
 
 	}
-
 }
 
 void delete_node(LIST* List, char sub_code[])
